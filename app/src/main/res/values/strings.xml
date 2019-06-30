@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Beacon</string>
+    <string name="dist_title">Distância Real Time</string>
+    <string name="mean_dist_title">Distância Média</string>
+    <string name="temp_dist_value">Temp</string>
+    <string name="title">USPerto</string>
 </resources>

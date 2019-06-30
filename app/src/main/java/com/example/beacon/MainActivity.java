@@ -1,11 +1,13 @@
 package com.example.beacon;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.github.pwittchen.reactivebeacons.library.rx2.ReactiveBeacons;
 
@@ -27,12 +29,14 @@ public class MainActivity extends AppCompatActivity {
     private Disposable subscription;
     private ArrayList<BeaconHelper> meanRssi = new ArrayList<>();
     private int count = 0;
+    private double aux = 0;
+    private TextView meanValue, realTimeValue;
 
     //Me ajuda a fazer a média
     class BeaconHelper{
         private String beaconName;
 
-        public ArrayList<Double> getDist() {
+        private ArrayList<Double> getDist() {
             return dist;
         }
 
@@ -42,11 +46,11 @@ public class MainActivity extends AppCompatActivity {
 
         private ArrayList<Double> dist = new ArrayList<>();
 
-        public String getBeaconName() {
+        private String getBeaconName() {
             return beaconName;
         }
 
-        public void setBeaconName(String beaconName) {
+        void setBeaconName(String beaconName) {
             this.beaconName = beaconName;
         }
 
@@ -56,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        meanValue = findViewById(R.id.meanDistValueTextView);
+        realTimeValue = findViewById(R.id.distValueTextView);
 
         //Beacon conhecido
         this.knownBeacons.add("0C:F3:EE:54:2F:C6");
@@ -67,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         reactiveBeacons = new ReactiveBeacons(this);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onResume() {
         super.onResume();
@@ -97,44 +105,34 @@ public class MainActivity extends AppCompatActivity {
                      * */
                     for (String myBeacon: knownBeacons) {
                         if(beacon.macAddress.address.equals(myBeacon)){
+                            int N = 4;
+                            double dist = Math.pow(10d, ((double) beacon.txPower - beacon.rssi) / (10 * N));
 
-                            Log.d(TAG, "OBSERVANDO o beacon: " + myBeacon);
+                            //Tratando interferência
+                            if(dist >= 0.5)
+                                dist = dist - 0.5;
 
-                            //Transforma RSSI em Metros (BUGANDOOOOOOOOOOOOOO)
-                            double ratio = beacon.rssi*1.0/beacon.txPower;
-                            ratio = ratio/(10 * 3.0);
-                            double dist = Math.pow(10, ratio);
-
+                            realTimeValue.setText(Double.toString(dist));
                             Log.d(TAG, "Distancia: " + (dist));
+
+                            //Log.d(TAG, "Proxi.: " + beacon.getProximity().maxDistance);
 
                             for (BeaconHelper bh: meanRssi){
                                 if(bh.getBeaconName().equals(myBeacon)){
                                     bh.getDist().add(dist);
+                                    aux+= dist;
                                 }
                             }
 
                             //Faz a média de 5 medições
                             this.count++;
 
-                            if(count == 5){
-                                double auxDist = 0;
-                                int sizeList = 0;
-
-                                for(BeaconHelper bh: meanRssi){
-                                    if(bh.getBeaconName().equals(myBeacon)){
-                                        sizeList = bh.getDist().size();
-                                        for (double sum: bh.getDist()){
-                                            auxDist += sum;
-                                        }
-                                    }
-                                }
+                            if(count == 5) {
+                                meanValue.setText(Double.toString(aux/count));
+                                Log.d(TAG + " teste", Double.toString(aux/5));
                                 count = 0;
-                                double finalDist = (auxDist/sizeList);
-
-                                Log.d(TAG, "Distancia Final: " + (finalDist));
+                                aux = 0;
                             }
-                        }else{
-                            Log.d(TAGERROR, "Não eh o meu!");
                         }
                     }
 
