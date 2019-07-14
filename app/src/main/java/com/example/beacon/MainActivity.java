@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.github.pwittchen.reactivebeacons.library.rx2.ReactiveBeacons;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -64,6 +65,16 @@ public class MainActivity extends AppCompatActivity {
         meanValue = findViewById(R.id.meanDistValueTextView);
         realTimeValue = findViewById(R.id.distValueTextView);
 
+        //this.callSmartWatch();
+        this.callBeaconFunction();
+
+    }
+
+    private void callSmartWatch(){
+    }
+
+
+    private void callBeaconFunction(){
         //Beacon conhecido
         this.knownBeacons.add("0C:F3:EE:54:2F:C6");
         BeaconHelper bh = new BeaconHelper();
@@ -114,22 +125,25 @@ public class MainActivity extends AppCompatActivity {
 
                             realTimeValue.setText(Double.toString(dist));
                             Log.d(TAG, "Distancia: " + (dist));
+                            Log.d("myRSSI", Double.toString(beacon.rssi));
 
                             //Log.d(TAG, "Proxi.: " + beacon.getProximity().maxDistance);
-
+                            double maxValue = 0;
                             for (BeaconHelper bh: meanRssi){
                                 if(bh.getBeaconName().equals(myBeacon)){
                                     bh.getDist().add(dist);
                                     aux+= dist;
+                                    maxValue = Collections.max(bh.getDist());
                                 }
                             }
 
                             //Faz a média de 5 medições
                             this.count++;
 
-                            if(count == 5) {
-                                meanValue.setText(Double.toString(aux/count));
-                                Log.d(TAG + " teste", Double.toString(aux/5));
+                            if(count == 6) {
+                                aux -= maxValue;
+                                meanValue.setText(Double.toString(aux/(count - 1)));
+                                Log.d(TAG + " teste", Double.toString(aux/(count - 1)));
                                 count = 0;
                                 aux = 0;
                             }
