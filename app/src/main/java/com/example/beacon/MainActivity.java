@@ -4,6 +4,8 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
     private int count = 0;
     private double aux = 0;
     private TextView meanValue, realTimeValue;
+
+    public FragmentManager fragmentManager = getSupportFragmentManager();
+    public FragmentTransaction fragmentTransaction;
 
     //Me ajuda a fazer a média
     class BeaconHelper{
@@ -62,11 +67,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        meanValue = findViewById(R.id.meanDistValueTextView);
-        realTimeValue = findViewById(R.id.distValueTextView);
+        //meanValue = findViewById(R.id.meanDistValueTextView);
+        //realTimeValue = findViewById(R.id.distValueTextView);
 
-        //this.callSmartWatch();
+        this.callSmartWatch();
         this.callBeaconFunction();
+
+        fragmentTransaction =  fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.fragment_content, new InitialFragment());
+        fragmentTransaction.commit();
 
     }
 
@@ -123,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
                             if(dist >= 0.5)
                                 dist = dist - 0.5;
 
-                            realTimeValue.setText(Double.toString(dist));
                             Log.d(TAG, "Distancia: " + (dist));
                             Log.d("myRSSI", Double.toString(beacon.rssi));
 
@@ -142,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
 
                             if(count == 6) {
                                 aux -= maxValue;
-                                meanValue.setText(Double.toString(aux/(count - 1)));
                                 Log.d(TAG + " teste", Double.toString(aux/(count - 1)));
                                 count = 0;
                                 aux = 0;
@@ -167,5 +174,9 @@ public class MainActivity extends AppCompatActivity {
     @Override protected void onDestroy(){
         super.onDestroy();
         subscription.dispose();
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }
