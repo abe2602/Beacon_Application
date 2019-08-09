@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.beacon;
 
 import android.content.Context;
 import androidx.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.myapplication", appContext.getPackageName());
+        assertEquals("com.example.beacon", appContext.getPackageName());
     }
 }

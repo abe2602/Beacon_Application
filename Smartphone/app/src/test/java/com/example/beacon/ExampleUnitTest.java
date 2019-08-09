@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.beacon;
 
 import org.junit.Test;
 

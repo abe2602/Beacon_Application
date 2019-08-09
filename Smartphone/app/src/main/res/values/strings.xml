@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Beacon</string>
+    <string name="dist_title">Distância Real Time</string>
+    <string name="mean_dist_title">Distância Média</string>
+    <string name="temp_dist_value">Temp</string>
+    <string name="title">USPerto</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
