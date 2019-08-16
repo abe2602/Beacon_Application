@@ -1,13 +1,14 @@
 # USPerto - Uma Aplicação Beacon
 ## Sobre
-Aplicação Android que visa avisar o usuário caso um objeto saia da zona de segurança, que é um raio pré-definido anteriormente, utilizando Beacons.
-A ideia é que haja uma comunicação entre um Smartphone e um Smartwatch. Toda vez que um objeto, que tem um beacon acoplado, saí 
-da zona, uma notificação é mandada pelo Smartwatch.
-
+Aplicação Android que para avisar um possível usuário sobre um objeto, que está sendo monitorado. O monitoramento é contabilizado pela distância entre a central (smartphone) do objeto (que está acoplhado a um Beacon).
+A ideia é que haja uma comunicação entre um Smartphone (Central) e um Smartwatch (apenas para avisar o usuário). Toda vez que um objeto, que tem um beacon acoplado, saí da zona, uma notificação é mandada pelo Smartwatch.
 
 ## Tecnologias utilizadas 
 - Java
 - Android
-- RxJava2, utilizando RxBeacon ( https://github.com/pwittchen/ReactiveBeacons )
+- RxJava2 
+- RxPaper ( https://github.com/pakoito/RxPaper )
+- RxBeacon ( https://github.com/pwittchen/ReactiveBeacons )
+- RxWear ( https://github.com/patloew/RxWear )
 
 ## Telas - TODO
