@@ -12,3 +12,11 @@ A ideia é que haja uma comunicação entre um Smartphone (Central) e um Smartwa
 - RxWear ( https://github.com/patloew/RxWear )
 
 ## Telas - TODO
+
+## Como utilizar
+É muito importante que todos os pré-requisitos sejam atendidos, caso contrário, o app não funcionará.
+1. Instalar o software Wear OS (da google) no Smartphone;
+2. Ligar o Bluetooth do Smartwatch e Smartphone;
+3. Parear o Smartwatch UTILIZANDO o Wear OS;
+4. Ligar o Beacon;
+5. Entrar no app e usa-lo.
