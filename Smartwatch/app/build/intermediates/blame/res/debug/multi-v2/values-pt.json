@@ -1,0 +1,36 @@
+{
+    "logs": [
+        {
+            "outputFile": "C:\\Users\\Abe\\Desktop\\TesteSW2\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-pt\\values-pt.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\Abe\\.gradle\\caches\\transforms-2\\files-2.1\\5d0d4a26f9da2067fa710097728ae269\\res\\values-pt\\values-pt.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,166",
+                        "endColumns": "110,118",
+                        "endOffsets": "161,280"
+                    },
+                    "to": {
+                        "startLines": "3,4",
+                        "startColumns": "4,4",
+                        "startOffsets": "156,267",
+                        "endColumns": "110,118",
+                        "endOffsets": "262,381"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\Abe\\.gradle\\caches\\transforms-2\\files-2.1\\582f36ffbbced7eb90d92f9457b6a162\\res\\values-pt\\values-pt.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    }
+                }
+            ]
+        }
+    ]
+}
