@@ -1,21 +1,15 @@
 package com.example.beacon;
 
-import android.Manifest;
-import android.os.Build;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.content.pm.PackageManager;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.patloew.rxwear.RxWear;
 
-import static androidx.core.content.PermissionChecker.checkSelfPermission;
+import com.example.beacon.smartwatch.SmartwatchFragment;
 
 public class InitialFragment extends Fragment {
 
@@ -32,11 +26,14 @@ public class InitialFragment extends Fragment {
     }
 
     private void navigateToSmartwatchScreen(){
-        MainActivity x = (MainActivity)getActivity();
+        Utils util = new Utils();
+        util.navigateToFragment((MainActivity)getActivity(), R.id.fragment_content,  new SmartwatchFragment(), true);
 
-        if(x.getSupportFragmentManager() != null){
-            FragmentTransaction fragmentTransaction = x.getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.add(R.id.fragment_content, new SmartwatchFragment()).commit();
-        }
+//        MainActivity x = (MainActivity)getActivity();
+//
+//        if(x.getSupportFragmentManager() != null){
+//            FragmentTransaction fragmentTransaction = x.getSupportFragmentManager().beginTransaction();
+//            fragmentTransaction.add(R.id.fragment_content, new SmartwatchFragment()).commit();
+//        }
     }
 }

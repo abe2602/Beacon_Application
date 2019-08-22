@@ -1,4 +1,4 @@
-package com.example.beacon;
+package com.example.beacon.smartwatch;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,8 +14,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
+import com.example.beacon.MainActivity;
+import com.example.beacon.R;
 import com.example.beacon.dialogs.ConnectSmartwatchDialog;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -24,31 +24,32 @@ import com.patloew.rxwear.RxWear;
 
 import java.util.ArrayList;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+
 import static androidx.core.content.PermissionChecker.checkSelfPermission;
 
 
 //todo: Colocar o botão de cancelar
 public class SmartwatchFragment extends Fragment  implements SmartwatchRecyclerViewAdapter.ListenItemClick{
-    private RecyclerView smartwatchRecyclerView;
     private ArrayList<String> connectedDevices = new ArrayList<>();
+    private CompositeDisposable disposeBag;
+    private SmartwatchRecyclerViewAdapter smartwatchAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_smartwatch, container, false);
+        disposeBag = new CompositeDisposable();
         showSmartwatch(rootView);
-
-//        Button tempButton = rootView.findViewById(R.id.tempButton);
-//        tempButton.setOnClickListener(view -> showSmartwatch());
-
         return rootView;
     }
 
     private void setupRecyclerView(View rootView){
-        smartwatchRecyclerView = rootView.findViewById(R.id.smartwatch_recycler_view);
+        RecyclerView smartwatchRecyclerView = rootView.findViewById(R.id.smartwatch_recycler_view);
         smartwatchRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        SmartwatchRecyclerViewAdapter smartwatchAdapter = new SmartwatchRecyclerViewAdapter(connectedDevices, this);
+        smartwatchAdapter = new SmartwatchRecyclerViewAdapter(connectedDevices, this);
         smartwatchRecyclerView.setAdapter(smartwatchAdapter);
         smartwatchRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -80,11 +81,14 @@ public class SmartwatchFragment extends Fragment  implements SmartwatchRecyclerV
             }
 
             //Descobre todos os relógios conectdos
-            rxWear.node().getConnectedNodes()
+            Disposable smartwatchListDispose = rxWear.node().getConnectedNodes()
                     .doOnNext(it -> connectedDevices.add(it.getDisplayName()))
                     .doOnError(it -> Log.d("HelpMe", it.toString()))
                     .doOnComplete(() -> setupRecyclerView(rootView))
+                    .ignoreElements().onErrorComplete()
                     .subscribe();
+
+            disposeBag.add(smartwatchListDispose);
 
         }else{
             Log.d("HelpMe", "sem play service");
@@ -96,5 +100,12 @@ public class SmartwatchFragment extends Fragment  implements SmartwatchRecyclerV
         ConnectSmartwatchDialog dialog = new ConnectSmartwatchDialog();
         FragmentManager fm = getActivity().getSupportFragmentManager();
         dialog.show(fm, "goToMainScreen");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        disposeBag.dispose();
+        smartwatchAdapter.clear();
     }
 }

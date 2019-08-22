@@ -9,11 +9,11 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.beacon.MainActivity;
-import com.example.beacon.MainFragment;
+import com.example.beacon.main.MainFragment;
 import com.example.beacon.R;
+import com.example.beacon.Utils;
 
 public class ConnectSmartwatchDialog extends DialogFragment {
 
@@ -35,12 +35,7 @@ public class ConnectSmartwatchDialog extends DialogFragment {
     }
 
     private void navigateToMainScreen(){
-        MainActivity x = (MainActivity)getActivity();
-
-        if(x.getSupportFragmentManager() != null){
-            FragmentTransaction fragmentTransaction = x.getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.add(R.id.fragment_content, new MainFragment()).commit();
-        }
+        Utils util = new Utils();
+        util.navigateToFragment((MainActivity)getActivity(), R.id.fragment_content, new MainFragment(), true);
     }
 }
