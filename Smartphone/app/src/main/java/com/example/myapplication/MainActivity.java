@@ -1,47 +1,34 @@
 package com.example.myapplication;
 
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.wearable.activity.WearableActivity;
-import android.util.Log;
-import android.widget.TextView;
+import android.os.PowerManager;
+import android.view.WindowManager;
 
-import com.google.android.gms.wearable.MessageApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.patloew.rxwear.RxWear;
-import com.patloew.rxwear.transformers.MessageEventGetDataMap;
 
-public class MainActivity extends WearableActivity {
-
-    private TextView mTextView;
-    private RxWear rxWear;
-    private String aux;
-    private double beacon;
+public class MainActivity extends AppCompatActivity {
+    public FragmentManager fragmentManager = getSupportFragmentManager();
+    public FragmentTransaction fragmentTransaction;
+    static RxWear rxWear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Enables Always-on
-        setAmbientEnabled();
-
-        //Recupe o nome do device
-        String x = Settings.Secure.getString(getContentResolver(), "bluetooth_name");
-
-        Log.d("HelpMe", x);
-
         rxWear = new RxWear(this);
-        rxWear.message().listen("/oba", MessageApi.FILTER_LITERAL)
-                .compose(MessageEventGetDataMap.noFilter())
-                .doOnNext(item ->{
-                    Log.d("HelpMe", "buga buga");
-                })
-                .subscribe(bom -> {
-                    Log.d("HelpMe", bom.toString());
-                }, ruim ->{
-                    Log.d("HelpMe", ruim.toString());
-                });
 
-        Log.d("HelpMe", "uga ugaa");
+        Utils util = new Utils();
+        util.navigateToFragment(this, R.id.fragment_content, new InitialFragment(), false);
+
     }
+
+    @Override
+    public void onBackPressed() {
+        fragmentManager.popBackStackImmediate();
+    }
+
 }
