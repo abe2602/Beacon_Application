@@ -15,7 +15,8 @@
         android:layout_marginTop="32dp"
         android:src="@drawable/ic_back_arrow"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="TODO" />
 
     <ImageView
         android:id="@+id/settingsImageView"
@@ -25,7 +26,8 @@
         android:src="@drawable/ic_settings"
         app:layout_constraintBottom_toBottomOf="@+id/backArrowImageView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/backArrowImageView" />
+        app:layout_constraintTop_toTopOf="@+id/backArrowImageView"
+        android:contentDescription="TODO" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -35,29 +37,33 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/mainRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="406dp"
+            android:layout_height="279dp"
             android:layout_marginBottom="281dp"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            tools:layout_editor_absoluteX="5dp">
 
         </androidx.recyclerview.widget.RecyclerView>
 
         <LinearLayout
             android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_width="286dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="4dp"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.461"
             app:layout_constraintStart_toStartOf="parent">
 
             <TextView
                 android:id="@+id/addItemTextView"
-                android:layout_width="match_parent"
+                android:layout_width="373dp"
                 android:layout_height="wrap_content"
-                android:text="Adicione"
+                android:text="@string/adicione"
                 android:textSize="30sp" />
 
         </LinearLayout>

@@ -70,7 +70,7 @@ public class MainFragment extends Fragment{
         });
 
         if(hasBleSupport()){
-            TextView addTextView = view.findViewById(R.id.addItemTextView);
+            TextView addTextView = view.findViewById(R.id.addItemTextView );
             addTextView.setOnClickListener(v -> {
                 Utils util = new Utils();
                 util.navigateToFragmentWithData((MainActivity) Objects.requireNonNull(getActivity()), R.id.fragment_content, new AddMonitoringFragment(), true,
