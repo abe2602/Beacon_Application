@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.TrackedThing;
 import com.jakewharton.rxbinding3.view.RxView;
 import com.pacoworks.rxpaper2.RxPaperBook;
 
@@ -21,12 +22,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerViewAdapter.NumberViewHolder> {
-    private ArrayList<String> availableThings;
-    private ArrayList<String> deletedThings;
+    private ArrayList<TrackedThing> availableThings;
+    private ArrayList<TrackedThing> deletedThings;
     private Context context;
 
     /*Construtor da classe, recebe como parâmetro a quantidade de views*/
-    public MainRecyclerViewAdapter(Context context, ArrayList<String> availableThings){
+    public MainRecyclerViewAdapter(Context context, ArrayList<TrackedThing> availableThings){
         this.availableThings = availableThings;
         this.context = context;
     }
@@ -51,6 +52,8 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
 
     @Override
     public int getItemCount() {
+
+        Log.d("MySize", Integer.toString(availableThings.size()));
         return availableThings.size();
     }
 
@@ -68,14 +71,14 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
         }
 
         public void bind(int listIndex){
-            thingName.setText(availableThings.get(listIndex));
+            thingName.setText(availableThings.get(listIndex).getName());
             RxPaperBook.init(context);
             RxPaperBook bookAvailableSensors = RxPaperBook.with("available_sensors");
             RxPaperBook book = RxPaperBook.with("monitored_things");
 
             RxView.clicks(deleteThing).flatMapCompletable(s ->
                     bookAvailableSensors.read("available_sensors").flatMapCompletable(list -> {
-                        deletedThings = (ArrayList<String>) list;
+                        deletedThings = (ArrayList<TrackedThing>) list;
                         deletedThings.add(availableThings.get(listIndex));
                         availableThings.remove(availableThings.get(listIndex));
                         return bookAvailableSensors.write("available_sensors", deletedThings)

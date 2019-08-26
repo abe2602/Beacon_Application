@@ -22,6 +22,7 @@ import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.Settings;
 import com.example.myapplication.SettingsFragment;
+import com.example.myapplication.TrackedThing;
 import com.example.myapplication.Utils;
 import com.github.pwittchen.reactivebeacons.library.rx2.ReactiveBeacons;
 import com.pacoworks.rxpaper2.RxPaperBook;
@@ -47,7 +48,7 @@ public class MainFragment extends Fragment{
     private CompositeDisposable subscription = new CompositeDisposable();
     private ReactiveBeacons reactiveBeacons;
     private RxWear rxWear;
-    private ArrayList<String> monitoredThings = new ArrayList<>();
+    private ArrayList<TrackedThing> monitoredThings = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,8 +93,8 @@ public class MainFragment extends Fragment{
                         return cache.subscribeOn(Schedulers.computation())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .doOnSuccess(listItems -> {
-                                    monitoredThings = (ArrayList<String>) listItems;
-                                    setupRecyclerView(view, (ArrayList<String>) listItems);
+                                    monitoredThings = (ArrayList<TrackedThing>) listItems;
+                                    setupRecyclerView(view, (ArrayList<TrackedThing>) listItems);
                                 })
                                 .flatMapObservable(item ->
                                         reactiveBeacons.observe()
@@ -108,7 +109,6 @@ public class MainFragment extends Fragment{
                                                         distance = beaconData.getDistance();
                                                     }
                                                     if(beaconData.macAddress.address.equals("0C:F3:EE:54:2F:C6")){
-                                                        //Log.d("HelpMe", Double.toString(distance));
                                                         if(distance> mySettings.getRange()){
                                                             //Colocar toda a lógica que queremos fazer aqui dentro
                                                             return rxWear.message().sendDataMapToAllRemoteNodes("/message")
@@ -133,7 +133,7 @@ public class MainFragment extends Fragment{
         }
     }
 
-    private void setupRecyclerView(View rootView, ArrayList<String> connectedDevices){
+    private void setupRecyclerView(View rootView, ArrayList<TrackedThing> connectedDevices){
         RecyclerView mainRecyclerView = rootView.findViewById(R.id.mainRecyclerView);
         mainRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         MainRecyclerViewAdapter mainRecyclerViewAdapter = new MainRecyclerViewAdapter(getActivity(), connectedDevices);
@@ -154,6 +154,16 @@ public class MainFragment extends Fragment{
             return false;
         }
         return true;
+    }
+
+    private ArrayList<TrackedThing> labelToMac(ArrayList<TrackedThing> trackedThings){
+        for(int i = 0; i < trackedThings.size(); i++){
+            if("Sensor 1" == trackedThings.get(i).getSensor()){
+
+            }
+        }
+
+        return null;
     }
 
     @Override

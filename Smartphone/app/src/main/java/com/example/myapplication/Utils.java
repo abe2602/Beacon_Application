@@ -18,7 +18,7 @@ public class Utils {
     }
 
     public void navigateToFragmentWithData(MainActivity mainActivity, int idFragment, Fragment destinationFragment, boolean hasBackStack,
-                                           String label,ArrayList<String> monitoredThings){
+                                           String label,ArrayList<TrackedThing> monitoredThings){
         Bundle bundle = new Bundle();
         bundle.putSerializable(label, monitoredThings);
         destinationFragment.setArguments(bundle);

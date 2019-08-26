@@ -35,8 +35,8 @@ import io.reactivex.schedulers.Schedulers;
 
 public class AddMonitoringFragment extends Fragment{
     private int selectedSensor = -1;
-    private ArrayList<String> arrayString = new ArrayList<>();
-    private ArrayList<String> monitoredThings = new ArrayList<>();
+    private ArrayList<TrackedThing> arrayString = new ArrayList<>();
+    private ArrayList<TrackedThing> monitoredThings = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,7 +49,7 @@ public class AddMonitoringFragment extends Fragment{
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            monitoredThings = (ArrayList<String>) bundle.getSerializable("monitored_things");
+            monitoredThings = (ArrayList<TrackedThing>) bundle.getSerializable("monitored_things");
         }
 
         return rootView;
@@ -65,14 +65,18 @@ public class AddMonitoringFragment extends Fragment{
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSuccess(item -> {
-                    arrayString = (ArrayList<String>) item;
+                    arrayString = (ArrayList<TrackedThing>) item;
                     //Log.d("HelpMe", "addMonitoring:  " + Integer.toString(arrayString.size()));
                     setView(view, arrayString);
                 })
                 .doOnError(error -> {
                     Log.d("HelpMe", "addMonitoring:  " + error.toString());
-                    arrayString.add("Sensor 1");
-                    arrayString.add("Sensor 2");
+                    TrackedThing auxTf = new TrackedThing(" ", "Sensor 1", true);
+                    arrayString.add(auxTf);
+
+                    TrackedThing auxTf2 = new TrackedThing(" ", "Sensor 2", true);
+                    auxTf2.setName("Sensor 2");
+                    arrayString.add(auxTf2);
 
                     book.write("available_sensors", arrayString)
                             .subscribeOn(Schedulers.io())
@@ -84,7 +88,7 @@ public class AddMonitoringFragment extends Fragment{
                 .subscribe();
     }
 
-    private void setView(View view, ArrayList<String> arrayString){
+    private void setView(View view, ArrayList<TrackedThing> arrayString){
         addRadioButtons(arrayString, view);
 
         Button addButton = view.findViewById(R.id.addButton);
@@ -93,16 +97,14 @@ public class AddMonitoringFragment extends Fragment{
 
             if(!editText.getText().toString().isEmpty()){
                 if(selectedSensor >= 0){
-                    monitoredThings.add(arrayString.get(selectedSensor));
+                    TrackedThing trackedThing = new TrackedThing(editText.getText().toString(), arrayString.get(selectedSensor).getSensor(), true);
+                    monitoredThings.add(trackedThing);
                     arrayString.remove(arrayString.get(selectedSensor));
 
                     RxPaperBook.init(getActivity());
                     RxPaperBook book = RxPaperBook.with("available_sensors");
                     book.write("available_sensors", arrayString).subscribe();
                     ((ViewGroup) view.findViewById(R.id.radiogroup)).removeAllViews();
-                    Utils utils = new Utils();
-                    utils.navigateToFragmentWithData((MainActivity) getActivity(),R.id.fragment_content, new MainFragment(), false,
-                             "available_sensors", arrayString);
                     Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
 
                     RxPaperBook.init(getActivity());
@@ -118,13 +120,13 @@ public class AddMonitoringFragment extends Fragment{
         });
     }
 
-    private void addRadioButtons(ArrayList<String> arrayString, View rootView) {
+    private void addRadioButtons(ArrayList<TrackedThing> arrayString, View rootView) {
         final RadioGroup rg = new RadioGroup(getActivity());
         RadioButton[] rb = new RadioButton[arrayString.size()];
 
         for (int i = 0; i < arrayString.size(); i++) {
             rb[i] = new RadioButton(getActivity());
-            rb[i].setText(arrayString.get(i));
+            rb[i].setText(arrayString.get(i).getSensor());
             rb[i].setId(i);
             rg.addView(rb[i]);
         }
