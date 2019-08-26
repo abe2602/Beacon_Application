@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -17,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.myapplication.main.MainFragment;
+import com.jakewharton.rxbinding3.view.RxView;
 import com.pacoworks.rxpaper2.RxPaperBook;
 
 import java.util.ArrayList;
@@ -41,10 +43,13 @@ public class AddMonitoringFragment extends Fragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_add_monitoring, container, false);
+        ImageView backButton = rootView.findViewById(R.id.backArrowImageView2);
+
+        RxView.clicks(backButton).doOnNext(item -> getActivity().getSupportFragmentManager().popBackStack()).subscribe();
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             monitoredThings = (ArrayList<String>) bundle.getSerializable("monitored_things");
-            //Log.d("HelpMe", "addMonitoring:  " + monitoredThings.toString());
         }
 
         return rootView;
