@@ -37,13 +37,17 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
-
+/*
+* todo: adicionar função no switch
+*  todo: enviar o nome do envio para o nome do relógio
+*   todo: ajustar o que envia para o relógio
+*    todo: ajustar layout do relógio
+* */
 public class MainFragment extends Fragment{
     private CompositeDisposable subscription = new CompositeDisposable();
     private ReactiveBeacons reactiveBeacons;
     private RxWear rxWear;
     private ArrayList<String> monitoredThings = new ArrayList<>();
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -104,7 +108,7 @@ public class MainFragment extends Fragment{
                                                         distance = beaconData.getDistance();
                                                     }
                                                     if(beaconData.macAddress.address.equals("0C:F3:EE:54:2F:C6")){
-                                                        Log.d("HelpMe", Double.toString(distance));
+                                                        //Log.d("HelpMe", Double.toString(distance));
                                                         if(distance> mySettings.getRange()){
                                                             //Colocar toda a lógica que queremos fazer aqui dentro
                                                             return rxWear.message().sendDataMapToAllRemoteNodes("/message")

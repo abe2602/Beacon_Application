@@ -30,8 +30,6 @@ import io.reactivex.disposables.Disposable;
 
 import static androidx.core.content.PermissionChecker.checkSelfPermission;
 
-
-//todo: Colocar o botão de cancelar
 public class SmartwatchFragment extends Fragment  implements SmartwatchRecyclerViewAdapter.ListenItemClick{
     private ArrayList<String> connectedDevices = new ArrayList<>();
     private CompositeDisposable disposeBag;

@@ -44,7 +44,7 @@ public class AddMonitoringFragment extends Fragment{
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             monitoredThings = (ArrayList<String>) bundle.getSerializable("monitored_things");
-            Log.d("HelpMe", "addMonitoring:  " + monitoredThings.toString());
+            //Log.d("HelpMe", "addMonitoring:  " + monitoredThings.toString());
         }
 
         return rootView;
@@ -61,7 +61,7 @@ public class AddMonitoringFragment extends Fragment{
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSuccess(item -> {
                     arrayString = (ArrayList<String>) item;
-                    Log.d("HelpMe", "addMonitoring:  " + Integer.toString(arrayString.size()));
+                    //Log.d("HelpMe", "addMonitoring:  " + Integer.toString(arrayString.size()));
                     setView(view, arrayString);
                 })
                 .doOnError(error -> {
