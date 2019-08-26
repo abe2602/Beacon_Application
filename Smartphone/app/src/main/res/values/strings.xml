@@ -3,4 +3,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="button">Button</string>
+    <string name="seja_avisado_em_seu_rel_gio_se_estiver_esquecendo_um_objeto">Seja avisado em seu relógio se estiver esquecendo um objeto</string>
 </resources>
