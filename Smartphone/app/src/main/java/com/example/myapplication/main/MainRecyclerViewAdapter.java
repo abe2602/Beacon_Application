@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -92,7 +93,9 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                                 );
                     })).doOnError(error -> Log.d("HelpMe", error.toString())).subscribe();
 
-            RxView.clicks(switchItem).subscribe();
+            switchItem.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+            });
         }
     }
 }
