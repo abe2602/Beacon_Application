@@ -9,4 +9,6 @@
     <string name="adicione">Adicione</string>
     <string name="conectado">CONECTADO</string>
     <string name="raio_de_interesse_n_raio_m_ximo_que_n_um_objeto_pode_ficar">Raio de interesse\nRaio máximo que   um objeto pode ficar</string>
+    <string name="deletado_com_sucesso">DELETADO COM SUCESSO</string>
+    <string name="imagedeletado">imageDeletado</string>
 </resources>
