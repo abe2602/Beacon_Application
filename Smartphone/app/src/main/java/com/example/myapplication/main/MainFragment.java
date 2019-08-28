@@ -24,6 +24,7 @@ import com.example.myapplication.Settings;
 import com.example.myapplication.SettingsFragment;
 import com.example.myapplication.TrackedThing;
 import com.example.myapplication.Utils;
+import com.github.pwittchen.reactivebeacons.library.rx2.Beacon;
 import com.github.pwittchen.reactivebeacons.library.rx2.ReactiveBeacons;
 import com.pacoworks.rxpaper2.RxPaperBook;
 import com.patloew.rxwear.RxWear;
@@ -39,16 +40,18 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 /*
-* todo: adicionar função no switch
-*  todo: enviar o nome do envio para o nome do relógio
-*   todo: ajustar o que envia para o relógio
-*    todo: ajustar layout do relógio
-* */
+ * todo: adicionar função no switch
+ *   todo: ajustar o que envia para o relógio
+ *    todo: ajustar layout do relógio
+ * */
 public class MainFragment extends Fragment{
     private CompositeDisposable subscription = new CompositeDisposable();
     private ReactiveBeacons reactiveBeacons;
     private RxWear rxWear;
     private ArrayList<TrackedThing> monitoredThings = new ArrayList<>();
+    String smartWatch = " ";
+    private ArrayList<Double> distanceListSensor1 = new ArrayList<>();
+    private ArrayList<Double> distanceListSensor2 = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,6 +67,11 @@ public class MainFragment extends Fragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         view.setKeepScreenOn(true);
+
+        Bundle bundle = this.getArguments();
+        if(bundle != null){
+            smartWatch = (String) bundle.getSerializable("chosenOne");
+        }
 
         ImageView backButton = view.findViewById(R.id.backArrowImageView);
         backButton.setOnClickListener(backButtonClick -> Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStackImmediate());
@@ -95,33 +103,32 @@ public class MainFragment extends Fragment{
                                 .doOnSuccess(listItems -> {
                                     monitoredThings = (ArrayList<TrackedThing>) listItems;
                                     setupRecyclerView(view, (ArrayList<TrackedThing>) listItems);
+                                    this.labelToMac(monitoredThings);
                                 })
                                 .flatMapObservable(item ->
                                         reactiveBeacons.observe()
                                                 .subscribeOn(Schedulers.io()) //Faz o trabalho numa thread separada
                                                 .observeOn(AndroidSchedulers.mainThread()) //Observa na thread principal
                                                 .flatMap(beaconData -> {
-                                                    double distance;
+                                                    for(TrackedThing auxThing: monitoredThings){
+                                                        if(beaconData.macAddress.address.equals(auxThing.getBeaconMac())){
+                                                            double distance = rssiToMeters(beaconData);
 
-                                                    if(!mySettings.getHasNotification()){
-                                                        distance = 0;
-                                                    }else {
-                                                        distance = beaconData.getDistance();
-                                                    }
-                                                    if(beaconData.macAddress.address.equals("0C:F3:EE:54:2F:C6")){
-                                                        if(distance> mySettings.getRange()){
-                                                            //Colocar toda a lógica que queremos fazer aqui dentro
-                                                            return rxWear.message().sendDataMapToAllRemoteNodes("/message")
-                                                                    .putBoolean("notification", true)
-                                                                    .toObservable()
-                                                                    .doOnComplete(() -> Log.d("HelpMe", "enviei ;)"));
-                                                        }else{
-                                                            return Observable.just(false);
+                                                            if(!mySettings.getHasNotification()){
+                                                                distance = -1;
+                                                            }
+
+                                                            if(distance> mySettings.getRange() && distance != -1){
+                                                                Log.d("HelpMe", Double.toString(distance));
+                                                                //Colocar toda a lógica que queremos fazer aqui dentro
+                                                                return rxWear.message().sendDataMapToAllRemoteNodes("/" + this.smartWatch)
+                                                                        .putBoolean("notification", true)
+                                                                        .toObservable()
+                                                                        .doOnComplete(() -> Log.d("HelpMe", "enviei ;)"));
+                                                            }
                                                         }
-                                                    }else{
-                                                        return Observable.just(false); //caso não nos interesse, não faz nada
                                                     }
-
+                                                    return Observable.just(false);
                                                 })
                                 );
                     }
@@ -131,6 +138,33 @@ public class MainFragment extends Fragment{
         }else{
             Log.d("HelpMe", "CAGUEI PRO BEACON");
         }
+    }
+
+    private double rssiToMeters(Beacon beacon){
+        double aux =  (beacon.txPower - beacon.rssi)/40.0;
+        double dist = Math.pow(10, aux);
+
+        if(beacon.macAddress.address.equals("0C:F3:EE:54:2F:C6")){
+            if(distanceListSensor1.size() > 2 ){
+                dist = Collections.min(distanceListSensor1);
+                dist = dist / 2;
+                distanceListSensor1.clear();
+                return dist;
+            }else{
+                distanceListSensor1.add(dist);
+            }
+        }else if(beacon.macAddress.address.equals("0C:F3:EE:54:0C:FE")){
+            if(distanceListSensor2.size() > 2 ){
+                dist = Collections.min(distanceListSensor2);
+                dist = dist / 2;
+                distanceListSensor2.clear();
+                return dist;
+            }else{
+                distanceListSensor2.add(dist);
+            }
+        }
+
+        return -1;
     }
 
     private void setupRecyclerView(View rootView, ArrayList<TrackedThing> connectedDevices){
@@ -156,14 +190,14 @@ public class MainFragment extends Fragment{
         return true;
     }
 
-    private ArrayList<TrackedThing> labelToMac(ArrayList<TrackedThing> trackedThings){
+    private void labelToMac(ArrayList<TrackedThing> trackedThings){
         for(int i = 0; i < trackedThings.size(); i++){
-            if("Sensor 1" == trackedThings.get(i).getSensor()){
-
+            if("Sensor 1".equals(trackedThings.get(i).getSensor())){
+                trackedThings.get(i).setBeaconMac("0C:F3:EE:54:2F:C6");
+            }else if("Sensor 2".equals(trackedThings.get(i).getSensor())){
+                trackedThings.get(i).setBeaconMac("0C:F3:EE:54:0C:FE");
             }
         }
-
-        return null;
     }
 
     @Override
@@ -186,3 +220,4 @@ public class MainFragment extends Fragment{
         subscription.dispose();
     }
 }
+

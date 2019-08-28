@@ -99,7 +99,7 @@ public class SmartwatchFragment extends Fragment  implements SmartwatchRecyclerV
     public void onItemClick(int clickItem) {
         ConnectSmartwatchDialog dialog = new ConnectSmartwatchDialog();
         FragmentManager fm = getActivity().getSupportFragmentManager();
-        dialog.show(fm, "goToMainScreen");
+        dialog.show(fm, connectedDevices.get(clickItem));
     }
 
     @Override

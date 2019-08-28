@@ -94,7 +94,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                     })).doOnError(error -> Log.d("HelpMe", error.toString())).subscribe();
 
             switchItem.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
+                Log.d("HelpMe", "TO ONLINE");
             });
         }
     }

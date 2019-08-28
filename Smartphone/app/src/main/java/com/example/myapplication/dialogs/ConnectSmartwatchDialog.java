@@ -36,6 +36,6 @@ public class ConnectSmartwatchDialog extends DialogFragment {
 
     private void navigateToMainScreen(){
         Utils util = new Utils();
-        util.navigateToFragment((MainActivity)getActivity(), R.id.fragment_content, new MainFragment(), true);
+        util.navigateToFragmentWithStringData((MainActivity)getActivity(), R.id.fragment_content, new MainFragment(), true, "chosenOne", this.getTag());
     }
 }
