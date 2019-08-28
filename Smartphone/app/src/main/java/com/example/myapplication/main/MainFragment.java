@@ -10,8 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,35 +36,33 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
 
 /*
- * todo: adicionar função no switch
  *   todo: ajustar o que envia para o relógio
  *    todo: ajustar layout do relógio
  * */
 public class MainFragment extends Fragment{
-    private CompositeDisposable subscription = new CompositeDisposable();
+    CompositeDisposable subscription = new CompositeDisposable();
     private ReactiveBeacons reactiveBeacons;
     private RxWear rxWear;
     private ArrayList<TrackedThing> monitoredThings = new ArrayList<>();
     String smartWatch = " ";
     private ArrayList<Double> distanceListSensor1 = new ArrayList<>();
     private ArrayList<Double> distanceListSensor2 = new ArrayList<>();
+    private View view = null;
+    Observable<Object> tryAgain = PublishSubject.create();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        view = rootView;
+        view.setKeepScreenOn(true);
+
         rxWear = new RxWear(getActivity());
         reactiveBeacons = new ReactiveBeacons(getActivity());
         RxPaperBook.init(getActivity());
-        return rootView;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        view.setKeepScreenOn(true);
 
         Bundle bundle = this.getArguments();
         if(bundle != null){
@@ -90,54 +86,66 @@ public class MainFragment extends Fragment{
                         "monitored_things", monitoredThings);
             });
 
-            RxPaperBook settingsBook = RxPaperBook.with("settings");
-            Single<Object> savedSettings = settingsBook.read("settings").onErrorReturnItem(new Settings(1, true));
-            savedSettings.flatMapObservable( settings -> {
-                        Settings mySettings = (Settings) settings;
+            findBeacons();
 
-                        RxPaperBook book = RxPaperBook.with("monitored_things");
-                        Single<Object> cache = book.read("monitored_things").onErrorReturnItem(Collections.emptyList());
-
-                        return cache.subscribeOn(Schedulers.computation())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .doOnSuccess(listItems -> {
-                                    monitoredThings = (ArrayList<TrackedThing>) listItems;
-                                    setupRecyclerView(view, (ArrayList<TrackedThing>) listItems);
-                                    this.labelToMac(monitoredThings);
-                                })
-                                .flatMapObservable(item ->
-                                        reactiveBeacons.observe()
-                                                .subscribeOn(Schedulers.io()) //Faz o trabalho numa thread separada
-                                                .observeOn(AndroidSchedulers.mainThread()) //Observa na thread principal
-                                                .flatMap(beaconData -> {
-                                                    for(TrackedThing auxThing: monitoredThings){
-                                                        if(beaconData.macAddress.address.equals(auxThing.getBeaconMac())){
-                                                            double distance = rssiToMeters(beaconData);
-
-                                                            if(!mySettings.getHasNotification()){
-                                                                distance = -1;
-                                                            }
-
-                                                            if(distance> mySettings.getRange() && distance != -1){
-                                                                Log.d("HelpMe", Double.toString(distance));
-                                                                //Colocar toda a lógica que queremos fazer aqui dentro
-                                                                return rxWear.message().sendDataMapToAllRemoteNodes("/" + this.smartWatch)
-                                                                        .putBoolean("notification", true)
-                                                                        .toObservable()
-                                                                        .doOnComplete(() -> Log.d("HelpMe", "enviei ;)"));
-                                                            }
-                                                        }
-                                                    }
-                                                    return Observable.just(false);
-                                                })
-                                );
-                    }
-            ).doOnError(error -> {Log.d("HelpMe", error.toString());})
-                    .ignoreElements().onErrorComplete()
-                    .subscribe();
         }else{
             Log.d("HelpMe", "CAGUEI PRO BEACON");
         }
+
+        return rootView;
+    }
+
+    public void findBeacons(){
+        RxPaperBook settingsBook = RxPaperBook.with("settings");
+        Single<Object> savedSettings = settingsBook.read("settings").onErrorReturnItem(new Settings(1, true));
+
+        Observable listItemsDisposable =  savedSettings.flatMapObservable(settings -> {
+                    Settings mySettings = (Settings) settings;
+
+                    RxPaperBook book = RxPaperBook.with("monitored_things");
+                    Single<Object> cache = book.read("monitored_things").onErrorReturnItem(Collections.emptyList());
+
+                    return cache.subscribeOn(Schedulers.computation())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .doOnSuccess(listItems -> {
+                                monitoredThings = (ArrayList<TrackedThing>) listItems;
+                                setupRecyclerView(this, (ArrayList<TrackedThing>) listItems);
+                                this.labelToMac(monitoredThings);
+                            })
+                            .flatMapObservable(item ->
+                                    reactiveBeacons.observe()
+                                            .subscribeOn(Schedulers.io()) //Faz o trabalho numa thread separada
+                                            .observeOn(AndroidSchedulers.mainThread()) //Observa na thread principal
+                                            .flatMap(beaconData -> {
+                                                for(TrackedThing auxThing: monitoredThings){
+                                                    if(beaconData.macAddress.address.equals(auxThing.getBeaconMac())){
+                                                        double distance = rssiToMeters(beaconData);
+
+                                                        if(!mySettings.getHasNotification()){
+                                                            distance = -1;
+                                                        }
+
+                                                        if(distance> (mySettings.getRange() + 1) && distance != -1 && auxThing.isAvailable()){
+                                                            //Colocar toda a lógica que queremos fazer aqui dentro
+                                                            return rxWear.message().sendDataMapToAllRemoteNodes("/" + this.smartWatch)
+                                                                    .putBoolean("notification", true)
+                                                                    .toObservable()
+                                                                    .doOnComplete(() -> Log.d("HelpMe", "enviei ;)"));
+                                                        }
+                                                    }
+                                                }
+                                                return Observable.just(false);
+                                            })
+                            );
+                }
+        );
+
+
+        Observable.merge(listItemsDisposable, this.tryAgain).subscribe();
+
+        // .subscribe();
+
+        //subscription.add(listItemsDisposable);
     }
 
     private double rssiToMeters(Beacon beacon){
@@ -167,10 +175,10 @@ public class MainFragment extends Fragment{
         return -1;
     }
 
-    private void setupRecyclerView(View rootView, ArrayList<TrackedThing> connectedDevices){
-        RecyclerView mainRecyclerView = rootView.findViewById(R.id.mainRecyclerView);
+    private void setupRecyclerView(MainFragment mainFragment, ArrayList<TrackedThing> connectedDevices){
+        RecyclerView mainRecyclerView = mainFragment.view.findViewById(R.id.mainRecyclerView);
         mainRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        MainRecyclerViewAdapter mainRecyclerViewAdapter = new MainRecyclerViewAdapter(getActivity(), connectedDevices);
+        MainRecyclerViewAdapter mainRecyclerViewAdapter = new MainRecyclerViewAdapter(mainFragment, connectedDevices);
         mainRecyclerView.setAdapter(mainRecyclerViewAdapter);
     }
 
@@ -190,6 +198,7 @@ public class MainFragment extends Fragment{
         return true;
     }
 
+    //Função necessária pois todas as informações são locais, não tem serviço
     private void labelToMac(ArrayList<TrackedThing> trackedThings){
         for(int i = 0; i < trackedThings.size(); i++){
             if("Sensor 1".equals(trackedThings.get(i).getSensor())){
@@ -198,20 +207,6 @@ public class MainFragment extends Fragment{
                 trackedThings.get(i).setBeaconMac("0C:F3:EE:54:0C:FE");
             }
         }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (subscription != null && !subscription.isDisposed()) {
-            subscription.dispose();
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        subscription.dispose();
     }
 
     @Override
