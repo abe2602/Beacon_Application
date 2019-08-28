@@ -40,9 +40,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
+            android:autofillHints=""
             android:hint="Nome do Objeto"
-            app:layout_constraintTop_toTopOf="parent"
-            android:autofillHints="" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <RadioGroup
             android:id="@+id/radiogroup"
@@ -54,7 +54,9 @@
             app:layout_constraintBottom_toTopOf="@+id/addButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addThingEditText" />
+            app:layout_constraintTop_toBottomOf="@+id/addThingEditText">
+
+        </RadioGroup>
 
         <Button
             android:id="@+id/addButton"
