@@ -30,19 +30,21 @@
         app:layout_constraintTop_toTopOf="@+id/backArrowImageView2" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout4"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="200dp"
-        android:background="#ffffff">
+        android:background="#ffffff"
+        app:layout_constraintTop_toTopOf="parent">
 
         <EditText
             android:id="@+id/addThingEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
+            android:autofillHints=""
             android:hint="Nome do Objeto"
-            app:layout_constraintTop_toTopOf="parent"
-            android:autofillHints="" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <RadioGroup
             android:id="@+id/radiogroup"
