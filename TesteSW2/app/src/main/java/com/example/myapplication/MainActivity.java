@@ -25,12 +25,13 @@ public class MainActivity extends WearableActivity {
 
         //Recupe o nome do device
         String deviceName = Settings.Secure.getString(getContentResolver(), "bluetooth_name");
+        TextView mainText = findViewById(R.id.mainText);
 
         rxWear = new RxWear(this);
         rxWear.message().listen("/" + deviceName, MessageApi.FILTER_LITERAL)
                 .compose(MessageEventGetDataMap.noFilter())
                 .doOnNext(item ->{
-                    Log.d("HelpMe", "buga buga");
+                    mainText.setText("Notificação!");
                 })
                 .subscribe(bom -> {
                     Log.d("HelpMe", bom.toString());
