@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -19,16 +18,12 @@ import com.pacoworks.rxpaper2.RxPaperBook;
 
 import java.util.ArrayList;
 
-import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerViewAdapter.NumberViewHolder> {
     private ArrayList<TrackedThing> availableThings;
     private ArrayList<TrackedThing> deletedThings;
-    private CompositeDisposable subscription = new CompositeDisposable();
     private Context context;
     private MainFragment mainFragment;
 
@@ -59,8 +54,6 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
 
     @Override
     public int getItemCount() {
-
-        Log.d("MySize", Integer.toString(availableThings.size()));
         return availableThings.size();
     }
 
@@ -80,10 +73,16 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
         public void bind(int listIndex){
             thingName.setText(availableThings.get(listIndex).getName());
             switchItem.setChecked(availableThings.get(listIndex).isAvailable());
+
             RxPaperBook.init(context);
             RxPaperBook availableSensorsBook = RxPaperBook.with("available_sensors");
             RxPaperBook monitoredThingsBook = RxPaperBook.with("monitored_things");
 
+            /*
+             * Clique do botão de adicionar:
+             * pega da cache todos os sensores disponíveis e atualiza a lista. Uma vez que
+             * a lista de sensores disponíveis é atualizada, a lista de objetos observados é modificada
+             * */
             RxView.clicks(deleteThing).flatMapCompletable(s ->
                     availableSensorsBook.read("available_sensors").flatMapCompletable(availableItemsList -> {
                         deletedThings = (ArrayList<TrackedThing>) availableItemsList;
@@ -100,12 +99,16 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                                 );
                     })).doOnError(error -> Log.d("HelpMe", error.toString())).subscribe();
 
+            /*
+             * Mudança de disponibilidade:
+             * Disponibilidade do sensor: se mudar de disponibilidade, atualiza na lista de sensores disponíveis (que está
+             * na cache) e reinicia a stream
+             * */
             switchItem.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 monitoredThingsBook.read("monitored_things").flatMapCompletable(monitoredThingsList ->{
                     ArrayList<TrackedThing> newMonitoredThingsList = (ArrayList<TrackedThing>) monitoredThingsList;
                     newMonitoredThingsList.get(listIndex).setAvailable(isChecked);
                     return monitoredThingsBook.write("monitored_things", newMonitoredThingsList).doOnComplete(() -> {
-                        //mainFragment.subscription.dispose();
                         mainFragment.findBeacons();
                     });
                 }).subscribe();

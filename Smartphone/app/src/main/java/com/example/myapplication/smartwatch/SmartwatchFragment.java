@@ -5,16 +5,16 @@ import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
@@ -45,6 +45,7 @@ public class SmartwatchFragment extends Fragment  implements SmartwatchRecyclerV
         return rootView;
     }
 
+    //Popula a recyclerView
     private void setupRecyclerView(View rootView){
         RecyclerView smartwatchRecyclerView = rootView.findViewById(R.id.smartwatch_recycler_view);
         smartwatchRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -54,6 +55,7 @@ public class SmartwatchFragment extends Fragment  implements SmartwatchRecyclerV
 
     }
 
+    //Verifica se o wearOS está instalado
     private boolean isGooglePlayServicesAvailable() {
         MainActivity activity = (MainActivity)getActivity();
         int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(activity);
@@ -103,8 +105,8 @@ public class SmartwatchFragment extends Fragment  implements SmartwatchRecyclerV
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroy() {
+        super.onDestroy();
         disposeBag.dispose();
         smartwatchAdapter.clear();
     }

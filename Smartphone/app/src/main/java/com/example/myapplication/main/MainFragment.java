@@ -35,23 +35,23 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subjects.PublishSubject;
 
 /*
  *   todo: ajustar o que envia para o relógio
  *    todo: ajustar layout do relógio
  * */
+
 public class MainFragment extends Fragment{
-    CompositeDisposable subscription = new CompositeDisposable();
+    private CompositeDisposable subscription = new CompositeDisposable();
     private ReactiveBeacons reactiveBeacons;
     private RxWear rxWear;
     private ArrayList<TrackedThing> monitoredThings = new ArrayList<>();
-    String smartWatch = " ";
+    private String smartWatch = " ";
     private ArrayList<Double> distanceListSensor1 = new ArrayList<>();
     private ArrayList<Double> distanceListSensor2 = new ArrayList<>();
     private View view = null;
-    Observable<Object> tryAgain = PublishSubject.create();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -89,17 +89,17 @@ public class MainFragment extends Fragment{
             findBeacons();
 
         }else{
-            Log.d("HelpMe", "CAGUEI PRO BEACON");
+            Log.d("HelpMe", "Não suporta BLE");
         }
 
         return rootView;
     }
 
-    public void findBeacons(){
+    void findBeacons(){
         RxPaperBook settingsBook = RxPaperBook.with("settings");
         Single<Object> savedSettings = settingsBook.read("settings").onErrorReturnItem(new Settings(1, true));
 
-        Observable listItemsDisposable =  savedSettings.flatMapObservable(settings -> {
+        Disposable listItemsDisposable =  savedSettings.flatMapObservable(settings -> {
                     Settings mySettings = (Settings) settings;
 
                     RxPaperBook book = RxPaperBook.with("monitored_things");
@@ -138,14 +138,10 @@ public class MainFragment extends Fragment{
                                             })
                             );
                 }
-        );
+        ).doOnError(error -> Log.d("HelpMe", error.toString())).ignoreElements().onErrorComplete().subscribe();
 
 
-        Observable.merge(listItemsDisposable, this.tryAgain).subscribe();
-
-        // .subscribe();
-
-        //subscription.add(listItemsDisposable);
+        subscription.add(listItemsDisposable);
     }
 
     private double rssiToMeters(Beacon beacon){
@@ -175,6 +171,7 @@ public class MainFragment extends Fragment{
         return -1;
     }
 
+    //Popula a reyclerview
     private void setupRecyclerView(MainFragment mainFragment, ArrayList<TrackedThing> connectedDevices){
         RecyclerView mainRecyclerView = mainFragment.view.findViewById(R.id.mainRecyclerView);
         mainRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -182,6 +179,7 @@ public class MainFragment extends Fragment{
         mainRecyclerView.setAdapter(mainRecyclerViewAdapter);
     }
 
+    //Check se há suporte ao BLE
     private Boolean hasBleSupport(){
         //Caso não suporte BLE
         if (!reactiveBeacons.isBleSupported()) {

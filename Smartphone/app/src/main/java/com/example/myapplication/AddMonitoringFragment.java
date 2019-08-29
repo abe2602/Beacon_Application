@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -34,6 +35,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class AddMonitoringFragment extends Fragment{
+    private CompositeDisposable disposable = new CompositeDisposable();
     private int selectedSensor = -1;
     private ArrayList<TrackedThing> arrayString = new ArrayList<>();
     private ArrayList<TrackedThing> monitoredThings = new ArrayList<>();
@@ -61,7 +63,7 @@ public class AddMonitoringFragment extends Fragment{
         RxPaperBook.init(getActivity());
         RxPaperBook book = RxPaperBook.with("available_sensors");
 
-        Disposable x = book.read("available_sensors")
+        Disposable addDisposable = book.read("available_sensors")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSuccess(item -> {
@@ -86,6 +88,8 @@ public class AddMonitoringFragment extends Fragment{
                             }).doOnError(error2 -> Log.d("HelpMe", "addMonitoring:  " + error2.toString())).subscribe();
                 }).ignoreElement().onErrorComplete()
                 .subscribe();
+
+        disposable.add(addDisposable);
     }
 
     private void setView(View view, ArrayList<TrackedThing> arrayString){
@@ -138,4 +142,9 @@ public class AddMonitoringFragment extends Fragment{
         ((ViewGroup) rootView.findViewById(R.id.radiogroup)).addView(rg);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        disposable.dispose();
+    }
 }
