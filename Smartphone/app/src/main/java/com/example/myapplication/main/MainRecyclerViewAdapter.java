@@ -109,7 +109,8 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                     ArrayList<TrackedThing> newMonitoredThingsList = (ArrayList<TrackedThing>) monitoredThingsList;
                     newMonitoredThingsList.get(listIndex).setAvailable(isChecked);
                     return monitoredThingsBook.write("monitored_things", newMonitoredThingsList).doOnComplete(() -> {
-                        mainFragment.findBeacons();
+                        mainFragment.findBeacons("0C:F3:EE:54:0C:FE");
+                        mainFragment.findBeacons("0C:F3:EE:54:2F:C6");
                     });
                 }).subscribe();
             });

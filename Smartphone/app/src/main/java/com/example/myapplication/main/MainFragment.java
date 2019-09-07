@@ -49,8 +49,6 @@ public class MainFragment extends Fragment{
     private RxWear rxWear;
     private ArrayList<TrackedThing> monitoredThings = new ArrayList<>();
     private String smartWatch = " ";
-    private ArrayList<Double> distanceListSensor1 = new ArrayList<>();
-    private ArrayList<Double> distanceListSensor2 = new ArrayList<>();
     private View view = null;
 
     @Override
@@ -86,7 +84,8 @@ public class MainFragment extends Fragment{
                         "monitored_things", monitoredThings);
             });
 
-            findBeacons();
+            findBeacons("0C:F3:EE:54:2F:C6");
+            findBeacons("0C:F3:EE:54:0C:FE");
 
         }else{
             Log.d("HelpMe", "Não suporta BLE");
@@ -95,7 +94,7 @@ public class MainFragment extends Fragment{
         return rootView;
     }
 
-    void findBeacons(){
+    void findBeacons(String macSctring){
         RxPaperBook settingsBook = RxPaperBook.with("settings");
         Single<Object> savedSettings = settingsBook.read("settings").onErrorReturnItem(new Settings(1, true));
 
@@ -116,9 +115,12 @@ public class MainFragment extends Fragment{
                                     reactiveBeacons.observe()
                                             .subscribeOn(Schedulers.io()) //Faz o trabalho numa thread separada
                                             .observeOn(AndroidSchedulers.mainThread()) //Observa na thread principal
+
+                                            .filter(beacon -> (beacon.macAddress.address.equals(macSctring) ))
                                             .flatMap(beaconData -> {
                                                 for(TrackedThing auxThing: monitoredThings){
                                                     if(beaconData.macAddress.address.equals(auxThing.getBeaconMac())){
+                                                        Log.d("HelpMe", macSctring);
                                                         double distance = rssiToMeters(beaconData);
 
                                                         if(!mySettings.getHasNotification()){
@@ -149,26 +151,10 @@ public class MainFragment extends Fragment{
         double dist = Math.pow(10, aux);
 
         if(beacon.macAddress.address.equals("0C:F3:EE:54:2F:C6")){
-            if(distanceListSensor1.size() > 2 ){
-                dist = Collections.min(distanceListSensor1);
-                dist = dist / 2;
-                distanceListSensor1.clear();
-                return dist;
-            }else{
-                distanceListSensor1.add(dist);
-            }
-        }else if(beacon.macAddress.address.equals("0C:F3:EE:54:0C:FE")){
-            if(distanceListSensor2.size() > 2 ){
-                dist = Collections.min(distanceListSensor2);
-                dist = dist / 2;
-                distanceListSensor2.clear();
-                return dist;
-            }else{
-                distanceListSensor2.add(dist);
-            }
+            return (dist - 1.5);
+        }else {
+            return (dist - 1.5);
         }
-
-        return -1;
     }
 
     //Popula a reyclerview
