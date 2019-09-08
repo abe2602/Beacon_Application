@@ -50,6 +50,8 @@ public class MainFragment extends Fragment{
     private ArrayList<TrackedThing> monitoredThings = new ArrayList<>();
     private String smartWatch = " ";
     private View view = null;
+    private double auxSensor1 = 1;
+    private double auxSensor2 = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -150,11 +152,23 @@ public class MainFragment extends Fragment{
         double aux =  (beacon.txPower - beacon.rssi)/40.0;
         double dist = Math.pow(10, aux);
 
-        if(beacon.macAddress.address.equals("0C:F3:EE:54:2F:C6")){
-            return (dist - 1.5);
-        }else {
-            return (dist - 1.5);
-        }
+         return Math.abs(dist - 1);
+
+//        if(beacon.macAddress.address.equals("0C:F3:EE:54:2F:C6")){
+//            if(Math.abs(auxSensor1 - dist) > 1)
+//                dist = Math.abs(dist - 1);
+//            else
+//                auxSensor1 = dist;
+//
+//            return (dist);
+//        }else {
+//            if(Math.abs(auxSensor2 - dist) > 1)
+//                dist = Math.abs(dist - 1);
+//            else
+//                auxSensor2 = dist;
+//
+//            return (dist);
+//        }
     }
 
     //Popula a reyclerview
