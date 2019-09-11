@@ -8,17 +8,6 @@
     tools:context=".AddMonitoringFragment">
 
     <ImageView
-        android:id="@+id/backArrowImageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        android:contentDescription="@string/todo"
-        android:src="@drawable/ic_back_arrow"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
         android:id="@+id/settingsImageView2"
         android:layout_width="wrap_content"
         android:layout_height="42dp"
@@ -28,6 +17,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/backArrowImageView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/backArrowImageView2" />
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"

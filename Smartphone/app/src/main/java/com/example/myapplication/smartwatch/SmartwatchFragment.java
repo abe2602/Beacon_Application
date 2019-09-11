@@ -5,16 +5,16 @@ import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
@@ -30,8 +30,6 @@ import io.reactivex.disposables.Disposable;
 
 import static androidx.core.content.PermissionChecker.checkSelfPermission;
 
-
-//todo: Colocar o botão de cancelar
 public class SmartwatchFragment extends Fragment  implements SmartwatchRecyclerViewAdapter.ListenItemClick{
     private ArrayList<String> connectedDevices = new ArrayList<>();
     private CompositeDisposable disposeBag;
@@ -47,6 +45,7 @@ public class SmartwatchFragment extends Fragment  implements SmartwatchRecyclerV
         return rootView;
     }
 
+    //Popula a recyclerView
     private void setupRecyclerView(View rootView){
         RecyclerView smartwatchRecyclerView = rootView.findViewById(R.id.smartwatch_recycler_view);
         smartwatchRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -56,6 +55,7 @@ public class SmartwatchFragment extends Fragment  implements SmartwatchRecyclerV
 
     }
 
+    //Verifica se o wearOS está instalado
     private boolean isGooglePlayServicesAvailable() {
         MainActivity activity = (MainActivity)getActivity();
         int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(activity);
@@ -101,12 +101,18 @@ public class SmartwatchFragment extends Fragment  implements SmartwatchRecyclerV
     public void onItemClick(int clickItem) {
         ConnectSmartwatchDialog dialog = new ConnectSmartwatchDialog();
         FragmentManager fm = getActivity().getSupportFragmentManager();
-        dialog.show(fm, "goToMainScreen");
+        dialog.show(fm, connectedDevices.get(clickItem));
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        smartwatchAdapter.clear();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         disposeBag.dispose();
         smartwatchAdapter.clear();
     }
