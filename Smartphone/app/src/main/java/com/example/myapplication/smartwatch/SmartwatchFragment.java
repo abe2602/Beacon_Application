@@ -105,6 +105,12 @@ public class SmartwatchFragment extends Fragment  implements SmartwatchRecyclerV
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        smartwatchAdapter.clear();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         disposeBag.dispose();
