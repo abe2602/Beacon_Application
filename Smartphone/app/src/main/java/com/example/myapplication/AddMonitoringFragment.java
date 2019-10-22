@@ -49,6 +49,12 @@ public class AddMonitoringFragment extends Fragment{
 
         RxView.clicks(backButton).doOnNext(item -> getActivity().getSupportFragmentManager().popBackStack()).subscribe();
 
+        ImageView settingsButton = rootView.findViewById(R.id.settingsImageView);
+        settingsButton.setOnClickListener(settingsClick -> {
+            Utils util = new Utils();
+            util.navigateToFragment((MainActivity) Objects.requireNonNull(getActivity()), R.id.fragment_content, new SettingsFragment(), true);
+        });
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             monitoredThings = (ArrayList<TrackedThing>) bundle.getSerializable("monitored_things");
