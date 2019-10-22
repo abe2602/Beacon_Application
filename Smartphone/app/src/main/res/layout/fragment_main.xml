@@ -50,16 +50,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                android:id="@+id/addItemTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Adicione"
-                android:textSize="30sp" />
-
-        </LinearLayout>
+            app:layout_constraintStart_toStartOf="parent"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingActionButton"
@@ -72,7 +63,7 @@
             android:focusable="true"
             android:src="@android:drawable/ic_input_add"
             android:visibility="visible"
-            app:backgroundTint="#24628E"
+            app:backgroundTint="#236f9b"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.87"

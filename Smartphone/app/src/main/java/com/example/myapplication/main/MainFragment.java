@@ -24,6 +24,7 @@ import com.example.myapplication.TrackedThing;
 import com.example.myapplication.Utils;
 import com.github.pwittchen.reactivebeacons.library.rx2.Beacon;
 import com.github.pwittchen.reactivebeacons.library.rx2.ReactiveBeacons;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.pacoworks.rxpaper2.RxPaperBook;
 import com.patloew.rxwear.RxWear;
 
@@ -79,8 +80,8 @@ public class MainFragment extends Fragment{
         });
 
         if(hasBleSupport()){
-            TextView addTextView = view.findViewById(R.id.addItemTextView );
-            addTextView.setOnClickListener(v -> {
+            FloatingActionButton addFloatinActionButton = view.findViewById(R.id.floatingActionButton);
+            addFloatinActionButton.setOnClickListener(v -> {
                 Utils util = new Utils();
                 util.navigateToFragmentWithData((MainActivity) Objects.requireNonNull(getActivity()), R.id.fragment_content, new AddMonitoringFragment(), true,
                         "monitored_things", monitoredThings);
