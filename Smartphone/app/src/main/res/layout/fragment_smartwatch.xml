@@ -24,8 +24,8 @@
             android:layout_marginBottom="5dp">
 
             <ImageView
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:src="@drawable/outline_bluetooth_black_48" />
 
             <LinearLayout
