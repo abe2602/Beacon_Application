@@ -10,24 +10,23 @@
 
     <Button
         android:id="@+id/chooseButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="356dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/inicialbutton"
         android:text="@string/button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.743" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="305dp"
         android:layout_height="71dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="180dp"
         android:text="@string/seja_avisado_em_seu_rel_gio_se_estiver_esquecendo_um_objeto"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
@@ -42,9 +41,8 @@
         android:layout_width="131dp"
         android:layout_height="134dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="204dp"
+        android:layout_marginTop="180dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="32dp"
         android:contentDescription="@string/todo"
         android:src="@drawable/clock"
         app:layout_constraintBottom_toTopOf="@+id/textView"
