@@ -2,6 +2,11 @@
 <resources>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#236f9b</color>
     <color name="grey2">#eff2f7</color>
+
+    <!-- Switch Colors-->
+    <color name="disable_forground_grey">#43331f1f</color>
+    <color name="disable_thumb_grey">#1c000000</color>
+    <color name="enable_thumb_green">#236f9b</color>
 </resources>
