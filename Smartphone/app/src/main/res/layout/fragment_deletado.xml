@@ -19,6 +19,7 @@
         android:background="#00FFFFFF"
         android:text="@string/deletado_com_sucesso"
         android:textAlignment="center"
+        android:textColor="#FFFFFF"
         android:textSize="36sp" />
 
     <ImageView

@@ -19,6 +19,7 @@
         android:background="#00FFFFFF"
         android:text="@string/conectado"
         android:textAlignment="center"
+        android:textColor="#FFFFFF"
         android:textSize="36sp" />
 
     <ImageView
