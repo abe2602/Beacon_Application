@@ -24,8 +24,8 @@
             android:layout_marginBottom="5dp">
 
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:src="@drawable/outline_bluetooth_black_48" />
 
             <LinearLayout
@@ -59,10 +59,12 @@
 
             </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
+
         <Button
+            android:id="@+id/CanceButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Cancelar"/>
+            android:text="Cancelar" />
     </LinearLayout>
 </LinearLayout>

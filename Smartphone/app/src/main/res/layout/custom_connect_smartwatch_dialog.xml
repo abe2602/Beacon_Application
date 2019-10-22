@@ -42,24 +42,30 @@
         <Button
             android:id="@+id/buttonNo"
             android:layout_width="150dp"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
             android:layout_marginStart="32dp"
+            android:layout_marginTop="2dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="2dp"
             android:text="Não"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/buttonYes"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="3dp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/buttonYes"
             android:layout_width="150dp"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
             android:layout_marginEnd="32dp"
+            android:layout_marginBottom="2dp"
             android:text="Sim"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/buttonNo"
-            tools:layout_editor_absoluteY="4dp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
