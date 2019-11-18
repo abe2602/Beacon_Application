@@ -117,7 +117,6 @@ public class MainFragment extends Fragment{
                                     reactiveBeacons.observe()
                                             .subscribeOn(Schedulers.io()) //Faz o trabalho numa thread separada
                                             .observeOn(AndroidSchedulers.mainThread()) //Observa na thread principal
-
                                             .filter(beacon -> (beacon.macAddress.address.equals(macSctring) ))
                                             .flatMap(beaconData -> {
                                                 for(TrackedThing auxThing: monitoredThings){
