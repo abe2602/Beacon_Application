@@ -28,21 +28,27 @@
 
         <TextView
             android:id="@+id/seekbarTitleTextView"
-            android:layout_width="219dp"
+            android:layout_width="0dp"
             android:layout_height="58dp"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="52dp"
+            android:layout_marginTop="140dp"
             android:text="@string/raio_de_interesse_n_raio_m_ximo_que_n_um_objeto_pode_ficar"
+            android:textStyle="bold"
+            android:textColor="#000"
+            app:layout_constraintEnd_toStartOf="@+id/seekBar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/disableNotification"
-            android:layout_width="219dp"
+            android:layout_width="0dp"
             android:layout_height="18dp"
-            android:layout_marginTop="88dp"
+            android:layout_marginTop="52dp"
             android:text="Desativar notificação"
-            app:layout_constraintEnd_toEndOf="@+id/seekbarTitleTextView"
+            android:textStyle="bold"
+            android:textColor="#000"
+            app:layout_constraintEnd_toStartOf="@+id/notificationSwitch"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/seekbarTitleTextView"
             app:layout_constraintTop_toBottomOf="@+id/seekbarTitleTextView" />
 
@@ -56,7 +62,6 @@
             android:progress="1"
             app:layout_constraintBottom_toBottomOf="@+id/seekbarTitleTextView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/seekbarTitleTextView"
             app:layout_constraintTop_toTopOf="@+id/seekbarTitleTextView" />
 
         <TextView
@@ -79,11 +84,10 @@
             android:id="@+id/notificationSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
             android:checked="true"
             app:layout_constraintBottom_toBottomOf="@+id/disableNotification"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/disableNotification"
+            app:layout_constraintEnd_toEndOf="@+id/seekBar"
+            app:layout_constraintStart_toEndOf="@+id/seekbarTitleTextView"
             app:layout_constraintTop_toTopOf="@+id/disableNotification" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -92,26 +96,21 @@
         android:id="@+id/imageView4"
         android:layout_width="160dp"
         android:layout_height="157dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="124dp"
         android:src="@drawable/circle"
-        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout2"
-        app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"
-        app:layout_constraintHorizontal_bias="0.481"
-        app:layout_constraintStart_toStartOf="@+id/constraintLayout2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.164" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageView5"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
+        android:layout_width="122dp"
+        android:layout_height="94dp"
         android:src="@drawable/settings"
         app:layout_constraintBottom_toBottomOf="@+id/imageView4"
         app:layout_constraintEnd_toEndOf="@+id/imageView4"
         app:layout_constraintStart_toStartOf="@+id/imageView4"
         app:layout_constraintTop_toTopOf="@+id/imageView4" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

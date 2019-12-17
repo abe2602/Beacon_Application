@@ -121,7 +121,6 @@ public class MainFragment extends Fragment{
                                             .flatMap(beaconData -> {
                                                 for(TrackedThing auxThing: monitoredThings){
                                                     if(beaconData.macAddress.address.equals(auxThing.getBeaconMac())){
-                                                        Log.d("HelpMe", macSctring);
                                                         double distance = rssiToMeters(beaconData);
 
                                                         if(!mySettings.getHasNotification()){

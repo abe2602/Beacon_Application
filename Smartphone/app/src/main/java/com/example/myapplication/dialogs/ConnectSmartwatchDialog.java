@@ -14,6 +14,7 @@ import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.Utils;
 import com.example.myapplication.main.MainFragment;
+import com.example.myapplication.sucessfragment.ConnectionSucessFragment;
 
 public class ConnectSmartwatchDialog extends DialogFragment {
 
@@ -36,6 +37,7 @@ public class ConnectSmartwatchDialog extends DialogFragment {
 
     private void navigateToMainScreen(){
         Utils util = new Utils();
-        util.navigateToFragmentWithStringData((MainActivity)getActivity(), R.id.fragment_content, new MainFragment(), true, "chosenOne", this.getTag());
+        //util.navigateToFragmentWithStringData((MainActivity)getActivity(), R.id.fragment_content, new MainFragment(), true, "chosenOne", this.getTag());
+        util.navigateToFragmentWithStringData((MainActivity)getActivity(), R.id.fragment_content, new ConnectionSucessFragment(), true, "chosenOne", this.getTag());
     }
 }

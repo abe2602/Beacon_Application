@@ -14,12 +14,12 @@ import java.util.ArrayList;
 
 public class SmartwatchRecyclerViewAdapter extends RecyclerView.Adapter<SmartwatchRecyclerViewAdapter.NumberViewHolder> {
     private ArrayList<String> connectedDevices;
-    private ListenItemClick myClickListenner;
+    private ListenItemClick myClickListener;
 
     /*Construtor da classe, recebe como parâmetro a quantidade de views*/
-    public SmartwatchRecyclerViewAdapter(ArrayList<String> connectedDevices, ListenItemClick myClickListenner){
+    SmartwatchRecyclerViewAdapter(ArrayList<String> connectedDevices, ListenItemClick myClickListener){
         this.connectedDevices = connectedDevices;
-        this.myClickListenner = myClickListenner;
+        this.myClickListener = myClickListener;
     }
 
     @Override
@@ -27,12 +27,9 @@ public class SmartwatchRecyclerViewAdapter extends RecyclerView.Adapter<Smartwat
         Context context = parent.getContext();
         int layoutId = R.layout.smartwatch_recyclerview_layout;
         LayoutInflater inflater = LayoutInflater.from(context);
-        boolean attachImmediately = false;
 
-        View view = inflater.inflate(layoutId, parent, attachImmediately);
-        NumberViewHolder viewHolder = new NumberViewHolder(view);
-
-        return viewHolder;
+        View view = inflater.inflate(layoutId, parent, false);
+        return new NumberViewHolder(view);
     }
 
     @Override
@@ -46,26 +43,26 @@ public class SmartwatchRecyclerViewAdapter extends RecyclerView.Adapter<Smartwat
     }
 
     class NumberViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView deviceName = null;
+        TextView deviceName;
 
-        public NumberViewHolder(View itemView) {
+        NumberViewHolder(View itemView) {
             super(itemView);
             deviceName = itemView.findViewById(R.id.textViewTeste);
             itemView.setOnClickListener(this);
         }
 
-        public void bind(int listIndex){
+        void bind(int listIndex){
             deviceName.setText(connectedDevices.get(listIndex));
         }
 
         @Override
         public void onClick(View v) {
             int clickPosition = getAdapterPosition();
-            myClickListenner.onItemClick(clickPosition);
+            myClickListener.onItemClick(clickPosition);
         }
     }
 
-    public void clear() {
+    void clear() {
         int size = connectedDevices.size();
         connectedDevices.clear();
         notifyItemRangeRemoved(0, size);

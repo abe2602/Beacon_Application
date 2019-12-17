@@ -10,18 +10,15 @@
 
     <Button
         android:id="@+id/chooseButton"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="156dp"
+        android:background="@drawable/rounded_button"
         android:text="@string/button"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.81" />
+        app:layout_constraintEnd_toEndOf="@+id/textView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textView" />
 
     <TextView
         android:id="@+id/textView"
@@ -29,10 +26,10 @@
         android:layout_height="114dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="36dp"
-        android:background="#00FFFFFF"
+        android:textColor="#FFFFFF"
         android:text="@string/seja_avisado_em_seu_rel_gio_se_estiver_esquecendo_um_objeto"
         android:textAlignment="center"
-        android:textSize="28sp"
+        android:textSize="26sp"
         app:layout_constraintBottom_toTopOf="@+id/chooseButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.533"
@@ -43,7 +40,6 @@
         android:layout_width="171dp"
         android:layout_height="168dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:contentDescription="@string/todo"
@@ -52,5 +48,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.805" />
+        app:layout_constraintVertical_bias="0.8" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,7 +17,9 @@ import com.jakewharton.rxbinding3.view.RxView;
 import com.pacoworks.rxpaper2.RxPaperBook;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -93,11 +95,17 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                                         .subscribeOn(Schedulers.io())
                                         .observeOn(AndroidSchedulers.mainThread())
                                         .doOnComplete(() ->{
+                                            itemView.findViewById(R.id.deletedLayout).setVisibility(View.VISIBLE);
                                             notifyItemRemoved(listIndex);
                                             notifyItemRangeChanged(listIndex, availableThings.size()); }
                                         )
                                 );
-                    })).doOnError(error -> Log.d("HelpMe", error.toString())).subscribe();
+                    }))
+                    .andThen(
+                            Observable.just(1).debounce(1000, TimeUnit.MILLISECONDS).doOnNext(next ->{
+                                itemView.findViewById(R.id.deletedLayout).setVisibility(View.GONE);
+                            })
+                    ).doOnError(error -> Log.d("HelpMe", error.toString())).subscribe();
 
             /*
              * Mudança de disponibilidade:
