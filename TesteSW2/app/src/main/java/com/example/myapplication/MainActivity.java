@@ -42,8 +42,6 @@ public class MainActivity extends WearableActivity {
                 }, ruim ->{
                     Log.d("HelpMe", ruim.toString());
                 });
-
-        Log.d("HelpMe", "uga ugaa");
     }
 
     //Nosso SmartWatch não possui Speakers :(
