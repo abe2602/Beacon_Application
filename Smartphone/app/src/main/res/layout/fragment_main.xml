@@ -17,6 +17,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/desconectarHeaderTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="desconectar\nrelógio"
+        android:textColor="#FFFF"
+        android:textSize="10sp"
+        app:layout_constraintTop_toTopOf="@+id/backArrowImageView"
+        app:layout_constraintStart_toEndOf="@+id/backArrowImageView"/>
+
+    <TextView
+        android:id="@+id/addItemHeaderTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="OBJETOS MONITORADOS"
+        android:textColor="#FFFF"
+        android:textSize="27sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/imageView6"
+        app:layout_constraintEnd_toStartOf="@+id/settingsImageView"
+        app:layout_constraintStart_toEndOf="@+id/backArrowImageView"
+        app:layout_constraintTop_toBottomOf="@+id/desconectarHeaderTextView" />
+
     <ImageView
         android:id="@+id/settingsImageView"
         android:layout_width="wrap_content"
@@ -51,19 +74,33 @@
             android:id="@+id/linearLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginBottom="15dp"
+            android:background="#f0f2f5"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/addItemDescriptionTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="Clique para monitorar novos objetos"
+                android:textSize="20sp"
+                android:layout_marginStart="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addItemTextView" />
 
             <TextView
                 android:id="@+id/addItemTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Adicione"
-                android:textSize="30sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="10sp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="@+id/addItemDescriptionTextView"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -99,6 +136,4 @@
         layout="@layout/fragment_deletado"
         android:visibility="gone"
         />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
